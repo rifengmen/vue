@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="./static/css/shop.css"/>
+    <link rel="stylesheet" type="text/css" href="./static/css/iconfont.css"/>
+    <script src="./static/js/rem.js" type="text/javascript" charset="utf-8"></script>
+    <script src="./static/js/jquery-3.3.1.js"></script>
+    <script src="./static/js/vue.js"></script>
+    <script src="./static/js/shop.js"></script>
+</head>
+<body>
+    <div class="app">
+        <!--头部-->
+        <header>
+            <a href="#"class="position">
+                <i class="iconfont icon-xiangzuo"></i>
+                <span>返回</span>
+            </a>
+            <span> {{ seller.name }} </span>
+            <a href="#" class="sousuo">
+                <i class="iconfont icon-sousuo"></i>
+            </a>
+        </header>
+        <!--店铺封面-->
+        <div class="wrapper">
+            <div class="zhanwei">
+                <img :src="seller.avatar" alt="">
+            </div>
+            <div class="logo">
+                <img :src="seller.avatar" alt="">
+            </div>
+            <div class="up">
+                <h2> {{ seller.name }} </h2>
+                <p>
+                    <span>评价 {{ seller.score }} </span>
+                    <span>月售 {{ seller.sellCount }} 单</span>
+                    <span>蜂鸟快送约33分钟</span>
+                </p>
+                <p>
+                    <span>满减</span>
+                    <span>满35减15，满50减15</span>
+                </p>
+                <p>公告：欢迎光临，用餐高峰期请提前下单，谢谢！</p>
+            </div>
+        </div>
+        <!--商家分类选项-->
+        <ul class="recommend-fl">
+            <li class="hot">
+                <a href="#">点餐</a>
+            </li>
+            <li>
+                <a href="#">商家</a>
+            </li>
+        </ul>
+        <!--商品窗口-->
+        <div class="shop-view">
+            <!--商家列表-->
+            <div class="recommend-shop">
+                <div id="leftscroll">
+                    <ul class="list">
+                        <typelist v-for="(item , index) in goods" :item="item" :key="index+1"></typelist>
+                    </ul>
+                </div>
+                <div id="rightscroll">
+                    <ul class="recommend-shop-ul">
+                        <li v-for="(item , index) in goods" :key="index + 1">
+                            <h2> {{ item.name }} </h2>
+                            <ul>
+                                <li v-for="(val , i) in item.foods" :key="i + 1">
+                                    <a href="#">
+                                        <div class="left-img">
+                                            <img :src="val.icon" alt="">
+                                        </div>
+                                        <div class="right-text">
+                                            <h3> {{ val.name }} </h3>
+                                            <p class="iconxx">
+                                                <span class="yj">月售 {{ val.sellCount }} 单</span>
+                                                <span class="v">好评率 {{ val.rating }}%</span>
+                                            </p>
+                                            <p class="delivery">
+											    <span class="delivery-left">
+											        &yen;{{ val.price }}
+											        <del v-show="val.oldPrice">&yen;{{ val.oldPrice }} </del>
+											    </span>
+                                                <car-operate :foods="val"></car-operate>
+                                            </p>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <cart :selected="selectedFoods"></cart>
+</div>
+
+</body>
+</html>

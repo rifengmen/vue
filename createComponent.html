@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./static/css/bootstrap.css">
+</head>
+<body>
+
+    <div class="app">
+        <mybutton
+                v-for="(item , index) in skill"
+                :title="item" :key="index+1"
+                :index="index"
+                :style="color"
+                @changecolor="changeColor"
+        ></mybutton>
+    </div>
+
+</body>
+<script src="./static/js/vue.js"></script>
+<script>
+    Vue.component('mybutton',{
+        template: `<div>
+                                <h1> {{ title }} {{ index }} </h1>
+                                <button @click="add"> my-button {{ count }} </button>
+                           </div>`,
+        data: function () {
+            return {
+                count: 0,
+            };
+        },
+        props: ['title','index'],
+        methods: {
+            add() {
+                ++this.count;
+                this.$emit('changecolor','data');
+            },
+        },
+    });
+    let app = new Vue ({
+        el: '.app',
+        data: {
+            skill:['测试数据一','测试数据二','测试数据三'],
+            color: "",
+        },
+        methods: {
+            changeColor(data) {
+                let str = this._random().join(",");
+                this.color = `color:rgb(${str})`;
+            },
+            _random() {
+                let arr = [];
+                for (let i = 0; i < 3; i++) {
+                    arr.push(Math.random()*256 | 0);
+                }
+                return arr;
+            }
+        },
+    });
+</script>
+</html>

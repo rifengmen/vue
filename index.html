@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="./static/css/bootstrap.css">
+</head>
+<body>
+
+    <div class="app">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-lg-offset-4">
+                    <form class="navbar-form navbar-left" role="search">
+                        <div class="form-group">
+                            <input type="text" class="form-control" placeholder="Search" v-model="content" @keydown.enter.prevent="addSkill">
+                        </div>
+                        <button type="submit" class="btn btn-default" @click.prevent="addSkill">Submit</button>
+                    </form>
+                </div>
+                <div class="col-lg-4 col-lg-offset-4">
+                    <ul class="nav nav-tabs">
+                        <li :class="[cate=='all' ? 'active' : '']" @click="changeCate('all')"><a>ALL</a></li>
+                        <li :class="[cate==true ? 'active' : '']" @click="changeCate(true)"><a>DONE</a></li>
+                        <li :class="[cate==false ? 'active' : '']" @click="changeCate(false)"><a>UNDONE</a></li>
+                    </ul>
+                    <div class="panel panel-info">
+                        <div class="panel-body">
+                            <ul class="list-group">
+                                <li class="list-group-item" v-for="item in showArr">
+                                    {{ item.name }} <span class="badge" @click="removeSkill(item.id)">×</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+<script src="./static/js/vue.js"></script>
+<script>
+    let app = new Vue ({
+        el: '.app',
+        data: {
+            skill: [],
+            cate: "all",
+            content: "",
+        },
+        // 计算属性,可以直接使用
+        computed: {
+            showArr () {
+                let arr = [];
+                if (typeof this.cate == "boolean") {
+                    arr = this.skill.filter(ele => ele.isdone == this.cate);
+                }
+                else if (this.cate == "all") {
+                    arr = this.skill;
+                }
+                return arr;
+            }
+        },
+        //方法，需要某个动作触发这个方法
+        methods: {
+            initskill() {
+                let arr = [
+                    {id: 1, name: "ps", stage: "1", isdone: true},
+                    {id: 2, name: "html", stage: "2", isdone: true},
+                    {id: 3, name: "jquery", stage: "3", isdone: true},
+                    {id: 4, name: "php", stage: "4", isdone: true},
+                    {id: 5, name: "node", stage: "5", isdone: true},
+                    {id: 6, name: "vue", stage: "5", isdone: false},
+                    {id: 7, name: "mini paogress", stage: "5", isdone: false},
+                    {id: 8, name: "webpack", stage: "5", isdone: false},
+                ];
+                this.skill = localStorage.skill ? JSON.parse(localStorage.skill) : arr;
+            },
+            changeCate(v) {
+                this.cate = v;
+            },
+            addSkill() {
+                let id = 0;
+                if (!this.skill.length) {
+                    id = 1;
+                }
+                else {
+                    id = this.skill[this.skill.length - 1].id + 1;
+                }
+                this.skill.push({id , name:this.content, stage: 5 , isdone: false});
+            },
+            removeSkill(id) {
+                this.skill = this.skill.filter(ele => ele.id != id);
+            },
+        },
+        watch: {
+            skill(newv) {
+                localStorage.skill = JSON.stringify(this.skill);
+            }
+        },
+        //生命周期函数
+        created() {
+            this.initskill();
+        },
+    });
+
+</script>
+</html>
